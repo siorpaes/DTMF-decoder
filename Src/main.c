@@ -85,7 +85,29 @@ static void MX_ADC_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
+void actuateOutput(char dtmfcode)
+{
+	switch(dtmfcode){
+		case '1' :
+			HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_RESET);
+			break;
+		
+		case '2' :
+			HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_SET);
+			break;
+		
+		case '4' :
+			HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_RESET);
+			break;
 
+		case '5' :
+			HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_SET);
+			break;
+
+		default:
+			break;
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -164,6 +186,7 @@ int main(void)
 
 		if (dail1.new){
 			printf ("%c ", DTMFchar[dail1.digit & 0x0F]);
+			actuateOutput(DTMFchar[dail1.digit & 0x0F]);
 			dail1.new = 0;
 		}
 	}
@@ -346,6 +369,9 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, OUT1_Pin|OUT2_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -359,6 +385,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : OUT1_Pin OUT2_Pin */
+  GPIO_InitStruct.Pin = OUT1_Pin|OUT2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LD2_Pin */
   GPIO_InitStruct.Pin = LD2_Pin;
