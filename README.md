@@ -16,7 +16,7 @@ Pinout
 
 
 
-Note: audio input sinal must be conditioned so to have DC offset
+Note: audio input signal should be conditioned so to add DC offset to ADC input.
 See, for example:
 https://electronics.stackexchange.com/questions/14404/dc-biasing-audio-signal
 https://electronics.stackexchange.com/questions/5315/how-to-read-an-audio-signal-using-atmega328
